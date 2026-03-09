@@ -1,0 +1,6 @@
+vault.key
+vault_storage/
+uploads/
+__pycache__/
+*.pyc
+.env
