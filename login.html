@@ -11,24 +11,33 @@
         .form-control:focus { background: #1e293b; color: white; border-color: #38bdf8; box-shadow: none; }
         .btn-primary { background: #38bdf8; border: none; font-weight: 700; border-radius: 0.75rem; padding: 0.75rem; transition: 0.3s; color: #0f172a; }
         .btn-primary:hover { background: #7dd3fc; transform: translateY(-2px); }
+        .reg-link { color: #38bdf8; text-decoration: none; font-size: 0.85rem; transition: 0.2s; }
+        .reg-link:hover { color: #7dd3fc; text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="login-box text-center">
-        <h2 class="mb-2 fw-bold">🛡️ AI Vault</h2>
-        <p class="text-muted mb-4 small">Multi-Factor Encrypted Gateway</p>
+        <h2 class="mb-2 fw-bold text-white">🛡️ AI Vault</h2>
+        <p class="text-muted mb-4 small">Secure Identity Gateway</p>
         
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <div class="alert alert-danger py-2 small">{{ messages[0] }}</div>
+                <div class="alert alert-danger py-2 small border-0" style="background: rgba(220, 38, 38, 0.2); color: #fca5a5;">
+                    {{ messages[0] }}
+                </div>
             {% endif %}
         {% endwith %}
 
         <form method="POST">
             <input type="text" name="username" class="form-control mb-3" placeholder="Username" required>
             <input type="password" name="password" class="form-control mb-4" placeholder="Password" required>
-            <button type="submit" class="btn btn-primary w-100">AUTHENTICATE</button>
+            <button type="submit" class="btn btn-primary w-100 mb-3">AUTHENTICATE</button>
         </form>
+
+        <div class="mt-2">
+            <span class="text-muted small">New to the Vault?</span> 
+            <a href="/register" class="reg-link ms-1">Create an Account</a>
+        </div>
     </div>
 </body>
 </html>
