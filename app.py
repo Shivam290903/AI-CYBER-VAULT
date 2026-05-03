@@ -21,14 +21,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # OCR Path (Update this if your Tesseract location is different)
-# Replace your current pytesseract line with this:
-if os.name == 'nt': # Windows
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-# On Linux (Render), it will automatically find Tesseract in the system PATH.
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
 # Storage setup
-# Replace your current UPLOAD_FOLDER setup with this:
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+UPLOAD_FOLDER = "C:\\Users\\imshi\\OneDrive\\VaultCloud" 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # --- LOGIN MANAGER ---
@@ -72,8 +68,6 @@ class AuditLog(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-with app.app_context():
-    db.create_all()
 # --- ENCRYPTION ENGINE ---
 KEY_FILE = "vault.key"
 if os.path.exists(KEY_FILE):
@@ -325,4 +319,6 @@ def download_file(file_id):
     return send_file(io.BytesIO(cipher.decrypt(enc_data)), download_name=record.filename, as_attachment=True)
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
