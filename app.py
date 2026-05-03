@@ -72,6 +72,8 @@ class AuditLog(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+with app.app_context():
+    db.create_all()
 # --- ENCRYPTION ENGINE ---
 KEY_FILE = "vault.key"
 if os.path.exists(KEY_FILE):
@@ -323,6 +325,4 @@ def download_file(file_id):
     return send_file(io.BytesIO(cipher.decrypt(enc_data)), download_name=record.filename, as_attachment=True)
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
