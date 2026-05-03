@@ -1,0 +1,21 @@
+# Python & Virtual Environments
+__pycache__/
+*.pyc
+.venv
+venv/
+env/
+
+# Secrets & Configuration
+.env
+vault.key
+vault.ley
+
+# Flask & Database
+instance/
+*.db
+*.sqlite
+vault.db
+
+# User Uploads & Storage
+vault_storage/
+uploads/
