@@ -2,88 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Cyber Vault | Storage</title>
+    <title>AI Cyber Vault | Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root { --accent: #38bdf8; }
-        body { background: radial-gradient(circle at top right, #1e293b, #0f172a); color: #f8fafc; font-family: 'Inter', sans-serif; min-height: 100vh; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; }
-        .vault-title { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
-        .file-card { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 0.75rem; transition: 0.2s; }
-        .file-card:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.05); }
-        .btn-cyber { background: var(--accent); color: #0f172a; font-weight: 600; border-radius: 0.75rem; border: none; padding: 0.6rem 1.2rem; }
-        .alert { border-radius: 1rem; border: none; }
+        body { background: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 2rem; }
+        .file-card { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 0.75rem; margin-bottom: 0.5rem; transition: 0.3s; }
+        .file-card:hover { border-color: #38bdf8; }
     </style>
 </head>
 <body>
-
-<nav class="navbar navbar-dark py-3 mb-5 border-bottom border-secondary">
+<nav class="navbar navbar-dark border-bottom border-secondary mb-5">
     <div class="container">
-        <span class="navbar-brand vault-title h1 mb-0">🛡️ AI CYBER VAULT</span>
+        <span class="navbar-brand fw-bold text-info">🛡️ AI CYBER VAULT</span>
         <div class="d-flex align-items-center">
-            <span class="text-muted small me-3">Admin Session Active</span>
-            <a href="/logout" class="btn btn-sm btn-outline-danger px-3">Logout</a>
-        </div>
+    {% if current_user.username == 'admin' %}
+    <a href="/audit-logs" class="btn btn-sm btn-outline-warning me-3">🛡️ Admin Audit Logs</a>
+{% endif %}
+    
+    <span class="me-3 text-muted small">User: {{ current_user.username }}</span>
+    <a href="/logout" class="btn btn-sm btn-outline-danger">Logout</a>
+</div>
     </div>
 </nav>
 
 <div class="container">
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert {% if 'SUCCESS' in message %}alert-success{% else %}alert-warning text-dark{% endif %} alert-dismissible fade show shadow mb-4">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show mb-4">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+            {% endfor %}
+        {% endif %}
     {% endwith %}
 
-    <div class="row g-4">
-        <div class="col-lg-4">
-            <div class="glass p-4 h-100">
-                <h4 class="mb-3">Ingest Data</h4>
-                <form action="/upload" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" class="form-control bg-dark text-white border-secondary mb-3" required>
-                    <button type="submit" class="btn btn-cyber w-100">SECURE UPLOAD</button>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="glass">
+                <h4>Upload Asset</h4>
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" class="form-control bg-dark text-white mb-3" required>
+                    <button type="submit" class="btn btn-info w-100 fw-bold">SECURE & UPLOAD</button>
                 </form>
-                <hr class="my-4 opacity-25">
-                <div class="small">
-                    <p class="mb-1 text-info">● AI Scanning Active</p>
-                    <p class="mb-1 text-info">● AES-256 GCM Ready</p>
-                    <p class="mb-0 text-info">● Cloud Sync Enabled</p>
-                </div>
             </div>
         </div>
-
-        <div class="col-lg-8">
-            <div class="glass p-4 h-100">
-                <h4 class="mb-4">Secured Assets</h4>
-                <div class="row g-2">
-                    {% if files %}
-                        {% for file in files %}
-                        <div class="col-12">
-                            <div class="file-card p-3 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="text-white fw-bold d-block">{{ file }}</span>
-                                    <span class="text-muted" style="font-size: 0.7rem;">STATUS: ENCRYPTED AT REST</span>
-                                </div>
-                                <a href="/download/{{ file }}" class="btn btn-sm btn-outline-light px-4">🔓 Decrypt</a>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="text-center py-5 text-muted">
-                            <p>Storage drive is empty. No encrypted assets detected.</p>
-                        </div>
-                    {% endif %}
-                </div>
+        <div class="col-md-8">
+            <div class="glass">
+                <h4>Your Encrypted Vault</h4>
+                {% if files %}
+                    {% for file in files %}
+                    <div class="file-card p-3 d-flex justify-content-between align-items-center">
+                        <span>🔒 {{ file.filename }}</span>
+                        <a href="/download/{{ file.id }}" class="btn btn-sm btn-outline-light px-4">Decrypt</a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-5">No files found in your private vault.</p>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
