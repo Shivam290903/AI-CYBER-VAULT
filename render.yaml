@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: ai-cyber-vault
+    env: python
+    # This runs your script to install Tesseract OCR
+    buildCommand: ./render-build.sh
+    # This starts the production server
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+    # This is CRITICAL for persistent storage on Render
+    disk:
+      name: vault-storage
+      mountPath: /opt/render/project/src/uploads
+      sizeGB: 1
